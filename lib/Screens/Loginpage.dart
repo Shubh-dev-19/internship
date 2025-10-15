@@ -21,6 +21,10 @@ class _ObparkLoginScreenState extends State<ObparkLoginScreen> {
   String? errorMessage;
   bool isLoading = false;
 
+// In Loginpage.dart
+
+// In Loginpage.dart
+
   Future<void> _handleLogin() async {
     if (isLoading) return;
 
@@ -40,31 +44,21 @@ class _ObparkLoginScreenState extends State<ObparkLoginScreen> {
     });
 
     try {
-      print('Starting login for: $email');
-      final userCredential = await _authLoginService.signInWithEmailAndPassword(
+      // 1. Sign in the user
+      await _authLoginService.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      print('Login successful! Clearing navigation stack to reveal AuthGate.');
 
-      print('Login successful! User: ${userCredential.user?.uid}');
-
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      if (!mounted) return;
-
-      final currentUser = FirebaseAuth.instance.currentUser;
-      print('Current user after delay: ${currentUser?.uid}');
-
-      if (currentUser != null) {
-        print('Forcing navigation as fallback');
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const ObparkHomeScreen()),
-              (route) => false,
-        );
+      // 2. On success, pop all screens until we get back to the very first one.
+      //    AuthGate will have already switched its child to HomeScreen by now.
+      if (mounted) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
       }
 
     } on AuthFailure catch (e) {
-      print('Login failed: ${e.message}');
+      // On failure, just stop loading and show the error.
       if (mounted) {
         setState(() {
           errorMessage = e.message;
@@ -72,7 +66,6 @@ class _ObparkLoginScreenState extends State<ObparkLoginScreen> {
         });
       }
     } catch (e) {
-      print('Unexpected error during login: $e');
       if (mounted) {
         setState(() {
           errorMessage = 'Unexpected error. Please try again later.';
@@ -81,6 +74,7 @@ class _ObparkLoginScreenState extends State<ObparkLoginScreen> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
