@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="343" height="129" viewBox="0 0 343 129" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="343" y2="129" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B7A8F9"/>
+      <stop offset="1" stop-color="#074139"/>
+    </linearGradient>
+  </defs>
+  <!-- Simple visible background so it shows up in the carousel -->
+  <rect width="343" height="129" rx="12" fill="url(#bg)"/>
+</svg>

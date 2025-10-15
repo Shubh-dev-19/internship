@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761518283691",
+    "project_id": "obpark-d6645",
+    "storage_bucket": "obpark-d6645.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761518283691:android:b8c34dead7fbdc8d1d10ee",
+        "android_client_info": {
+          "package_name": "com.example.ob_park"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkWMVS1nF_VHq2X-e6BRZlOQDU3etKjHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
