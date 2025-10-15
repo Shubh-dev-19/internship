@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -292,21 +293,24 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-  
+
+// In ProfileScreen.dart
+
+// In ProfileScreen.dart
+
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      // Prevent closing the dialog by tapping outside while logging out
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           title: const Text(
             'Log Out',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           content: const Text(
             'Are you sure you want to log out?',
@@ -315,23 +319,34 @@ class ProfileScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                // Just close the dialog
+                Navigator.pop(dialogContext);
               },
               child: Text(
                 'Cancel',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
               ),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close dialog
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/onboarding', // Your onboarding route
-                  (route) => false,
-                );
+              onPressed: () async {
+                try {
+                  // 1. Sign out from Firebase. The state change is immediate.
+                  await FirebaseAuth.instance.signOut();
+                  print('Sign out successful. Clearing navigation stack.');
+
+                  // 2. IMPORTANT: Use the main ProfileScreen's context to
+                  //    pop all screens until we're back at the root (AuthGate).
+                  if (context.mounted) {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  }
+
+                } catch (e) {
+                  print("Error during sign out: $e");
+                  // If there's an error, just close the dialog.
+                  if (dialogContext.mounted) {
+                    Navigator.pop(dialogContext);
+                  }
+                }
               },
               child: const Text(
                 'Log Out',
